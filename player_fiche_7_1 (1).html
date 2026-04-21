@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche 7.1 — Formation BDR</title>
+<style>
+  body { margin: 0; background: #0f172a; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
+  .player { background: #1e293b; border-radius: 16px; padding: 32px; width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .title { color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+  .fiche { color: #f1f5f9; font-size: 22px; font-weight: 700; margin-bottom: 28px; }
+  .progress-wrap { background: #334155; border-radius: 4px; height: 6px; cursor: pointer; margin-bottom: 10px; }
+  .progress-bar { background: #6366f1; height: 6px; border-radius: 4px; width: 0%; transition: width 0.1s; }
+  .times { display: flex; justify-content: space-between; color: #64748b; font-size: 12px; margin-bottom: 24px; }
+  .controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 24px; }
+  .btn-play { background: #6366f1; border: none; border-radius: 50%; width: 56px; height: 56px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .btn-play svg { fill: white; }
+  .speeds { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .speed-btn { background: #334155; border: none; color: #94a3b8; border-radius: 20px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
+  .speed-btn.active { background: #6366f1; color: white; }
+</style>
+</head>
+<body>
+<div class="player">
+  <div class="title">Formation BDR — Daylindo</div>
+  <div class="fiche">Fiche 7.1</div>
+  <div class="progress-wrap" id="pw"><div class="progress-bar" id="pb"></div></div>
+  <div class="times"><span id="cur">0:00</span><span id="dur">0:00</span></div>
+  <div class="controls">
+    <button class="btn-play" id="btn">
+      <svg id="ico" width="24" height="24" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="speeds">
+    <button class="speed-btn" onclick="setSpeed(0.75)">0.75x</button>
+    <button class="speed-btn active" onclick="setSpeed(1)">1x</button>
+    <button class="speed-btn" onclick="setSpeed(1.25)">1.25x</button>
+    <button class="speed-btn" onclick="setSpeed(1.5)">1.5x</button>
+    <button class="speed-btn" onclick="setSpeed(2)">2x</button>
+  </div>
+</div>
+<audio id="audio" src="Fiche 7 1.m4a"></audio>
+<script>
+  var a=document.getElementById('audio'),btn=document.getElementById('btn'),ico=document.getElementById('ico'),pb=document.getElementById('pb'),cur=document.getElementById('cur'),dur=document.getElementById('dur'),pw=document.getElementById('pw');
+  function fmt(s){var m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
+  btn.onclick=function(){a.paused?a.play():a.pause();};
+  a.onplay=function(){ico.innerHTML='<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';};
+  a.onpause=function(){ico.innerHTML='<polygon points="5,3 19,12 5,21"/>';};
+  a.ontimeupdate=function(){pb.style.width=(a.currentTime/a.duration*100||0)+'%';cur.textContent=fmt(a.currentTime);};
+  a.onloadedmetadata=function(){dur.textContent=fmt(a.duration);};
+  pw.onclick=function(e){var r=pw.getBoundingClientRect();a.currentTime=(e.clientX-r.left)/r.width*a.duration;};
+  function setSpeed(s){a.playbackRate=s;document.querySelectorAll('.speed-btn').forEach(function(b){b.classList.remove('active');});event.target.classList.add('active');}
+</script>
+</body>
+</html>
