@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daylindo — Playbook Tech Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080b12;--bg2:#0e1320;--bg3:#131929;
+  --border:#1c2438;--border2:#263044;
+  --text:#e8edf5;--muted:#8a96ad;--dim:#4a5568;
+  --s1:#8b5cf6;--s1b:#1a0f2e;--s1c:#c4b5fd;
+  --s2:#f97316;--s2b:#1f1105;--s2c:#fdba74;
+  --s3:#3b82f6;--s3b:#091629;--s3c:#93c5fd;
+  --s4:#14b8a6;--s4b:#051714;--s4c:#5eead4;
+  --s5:#ec4899;--s5b:#1f0915;--s5c:#f9a8d4;
+  --vert:#22c55e;--rouge:#ef4444;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono','Courier New',monospace;min-height:100vh;overflow-x:hidden}
+
+/* ── HEADER ── */
+.header{padding:32px 40px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:4px}
+.logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.tagline{font-size:10px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+.doc-label{font-size:11px;color:var(--dim);border:1px solid var(--border2);padding:6px 14px;border-radius:20px}
+
+/* ── RÈGLE D'OR ── */
+.regle{margin:32px 40px 0;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.regle-label{font-size:10px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;flex-shrink:0}
+.rules-inline{display:flex;gap:8px;flex-wrap:wrap}
+.rule-chip{font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid;cursor:default;transition:transform .2s}
+.rule-chip:hover{transform:translateY(-2px)}
+.rule-chip.s1{background:rgba(139,92,246,.12);color:var(--s1c);border-color:rgba(139,92,246,.3)}
+.rule-chip.s2{background:rgba(249,115,22,.12);color:var(--s2c);border-color:rgba(249,115,22,.3)}
+.rule-chip.s3{background:rgba(59,130,246,.12);color:var(--s3c);border-color:rgba(59,130,246,.3)}
+.rule-chip.s4{background:rgba(20,184,166,.12);color:var(--s4c);border-color:rgba(20,184,166,.3)}
+.rule-chip.s5{background:rgba(236,72,153,.12);color:var(--s5c);border-color:rgba(236,72,153,.3)}
+
+/* ── NAV SEGMENTS ── */
+.nav{margin:32px 40px 0;display:flex;gap:8px;flex-wrap:wrap}
+.seg-btn{background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 18px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px;position:relative;overflow:hidden}
+.seg-btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s}
+.seg-btn:hover{color:var(--text)}
+.seg-btn.s1::before,.seg-btn.s1.active{background:rgba(139,92,246,.08)}
+.seg-btn.s2::before,.seg-btn.s2.active{background:rgba(249,115,22,.08)}
+.seg-btn.s3::before,.seg-btn.s3.active{background:rgba(59,130,246,.08)}
+.seg-btn.s4::before,.seg-btn.s4.active{background:rgba(20,184,166,.08)}
+.seg-btn.s5::before,.seg-btn.s5.active{background:rgba(236,72,153,.08)}
+.seg-btn:hover::before{opacity:1}
+.seg-btn.active{border-color:var(--acc,var(--s1))}
+.seg-btn.s1{--acc:var(--s1)}.seg-btn.s2{--acc:var(--s2)}
+.seg-btn.s3{--acc:var(--s3)}.seg-btn.s4{--acc:var(--s4)}
+.seg-btn.s5{--acc:var(--s5)}
+.seg-btn.active .dot{animation:pulse-dot 2s infinite}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.s1 .dot{background:var(--s1)}.s2 .dot{background:var(--s2)}
+.s3 .dot{background:var(--s3)}.s4 .dot{background:var(--s4)}
+.s5 .dot{background:var(--s5)}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── CONTENT ── */
+.main{padding:24px 40px 60px;max-width:1200px}
+.seg-panel{display:none;animation:fadeIn .3s ease}
+.seg-panel.show{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── HERO ── */
+.hero{border-radius:12px;padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;opacity:.06;filter:blur(40px)}
+.s1 .hero{background:var(--s1b);border:1px solid rgba(139,92,246,.2)}.s1 .hero::after{background:var(--s1)}
+.s2 .hero{background:var(--s2b);border:1px solid rgba(249,115,22,.2)}.s2 .hero::after{background:var(--s2)}
+.s3 .hero{background:var(--s3b);border:1px solid rgba(59,130,246,.2)}.s3 .hero::after{background:var(--s3)}
+.s4 .hero{background:var(--s4b);border:1px solid rgba(20,184,166,.2)}.s4 .hero::after{background:var(--s4)}
+.s5 .hero{background:var(--s5b);border:1px solid rgba(236,72,153,.2)}.s5 .hero::after{background:var(--s5)}
+.hero-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.hero-emoji{font-size:28px;line-height:1}
+.hero-id{font-size:11px;letter-spacing:.15em;text-transform:uppercase}
+.s1 .hero-id{color:var(--s1)}.s2 .hero-id{color:var(--s2)}
+.s3 .hero-id{color:var(--s3)}.s4 .hero-id{color:var(--s4)}
+.s5 .hero-id{color:var(--s5)}
+.hero-nom{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff}
+.hero-def{font-size:13px;color:var(--muted);line-height:1.7;max-width:700px}
+.pp-badge{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:11px;padding:6px 14px;border-radius:20px;border:1px solid}
+.s1 .pp-badge{background:rgba(139,92,246,.1);color:var(--s1c);border-color:rgba(139,92,246,.3)}
+.s2 .pp-badge{background:rgba(249,115,22,.1);color:var(--s2c);border-color:rgba(249,115,22,.3)}
+.s3 .pp-badge{background:rgba(59,130,246,.1);color:var(--s3c);border-color:rgba(59,130,246,.3)}
+.s4 .pp-badge{background:rgba(20,184,166,.1);color:var(--s4c);border-color:rgba(20,184,166,.3)}
+.s5 .pp-badge{background:rgba(236,72,153,.1);color:var(--s5c);border-color:rgba(236,72,153,.3)}
+
+/* ── GRILLE ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px}
+.card-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.secteur-list,.kw-list{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid var(--border2);color:var(--muted)}
+.s1 .secteur-list .tag{border-color:rgba(139,92,246,.2);background:rgba(139,92,246,.05);color:var(--s1c)}
+.s2 .secteur-list .tag{border-color:rgba(249,115,22,.2);background:rgba(249,115,22,.05);color:var(--s2c)}
+.s3 .secteur-list .tag{border-color:rgba(59,130,246,.2);background:rgba(59,130,246,.05);color:var(--s3c)}
+.s4 .secteur-list .tag{border-color:rgba(20,184,166,.2);background:rgba(20,184,166,.05);color:var(--s4c)}
+.s5 .secteur-list .tag{border-color:rgba(236,72,153,.2);background:rgba(236,72,153,.05);color:var(--s5c)}
+.kw-ok .tag{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac}
+.kw-ko .tag{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through}
+.kw-title{font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.kw-title.ok{color:var(--vert)}.kw-title.ko{color:var(--rouge)}
+
+/* ── PERSONAS ── */
+.personas-section{margin-bottom:24px}
+.sec-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.persona-tabs{display:flex;gap:8px;margin-bottom:0;flex-wrap:wrap}
+.p-tab{background:var(--bg2);border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;padding:8px 16px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .2s}
+.p-tab.active{color:var(--text);border-color:var(--border2)}
+.s1 .p-tab.active{background:rgba(139,92,246,.08);border-bottom-color:transparent;color:var(--s1c)}
+.s2 .p-tab.active{background:rgba(249,115,22,.08);border-bottom-color:transparent;color:var(--s2c)}
+.s3 .p-tab.active{background:rgba(59,130,246,.08);border-bottom-color:transparent;color:var(--s3c)}
+.s4 .p-tab.active{background:rgba(20,184,166,.08);border-bottom-color:transparent;color:var(--s4c)}
+.s5 .p-tab.active{background:rgba(236,72,153,.08);border-bottom-color:transparent;color:var(--s5c)}
+.persona-panels{background:var(--bg2);border:1px solid var(--border2);border-radius:0 8px 8px 8px}
+.persona-panel{display:none;padding:24px}
+.persona-panel.show{display:block;animation:fadeIn .2s ease}
+.douleur{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:20px;padding:12px 16px;background:var(--bg3);border-radius:6px;border-left:3px solid var(--dim)}
+.s1 .douleur{border-left-color:var(--s1)}.s2 .douleur{border-left-color:var(--s2)}
+.s3 .douleur{border-left-color:var(--s3)}.s4 .douleur{border-left-color:var(--s4)}
+.s5 .douleur{border-left-color:var(--s5)}
+.script-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.script-lines{display:flex;flex-direction:column;gap:10px}
+.script-line{padding:12px 16px;border-radius:6px;font-size:12px;line-height:1.7}
+.script-line.quote{background:#0f1a30;border:1px solid rgba(59,130,246,.15);color:#93c5fd;font-style:italic}
+.script-line.meta{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);color:#fca5a5;font-size:11px}
+.script-line.tip{background:var(--bg3);border:1px solid var(--border2);color:var(--muted)}
+
+/* ── KW GRID ── */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.kw-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px}
+
+/* ── PP DETAIL ── */
+.pp-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:24px}
+.pp-name{font-size:12px;font-weight:500;margin-bottom:8px}
+.s1 .pp-name{color:var(--s1)}.s2 .pp-name{color:var(--s2)}
+.s3 .pp-name{color:var(--s3)}.s4 .pp-name{color:var(--s4)}
+.s5 .pp-name{color:var(--s5)}
+.pp-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── MEMO FLASH (accueil) ── */
+.memo{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:0}
+.memo-row{display:grid;grid-template-columns:130px 1fr 2fr 1.2fr;gap:0;border-bottom:1px solid var(--border)}
+.memo-row:last-child{border-bottom:none}
+.memo-row.header .memo-cell{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.memo-cell{padding:14px 16px;font-size:12px;border-right:1px solid var(--border)}
+.memo-cell:last-child{border-right:none}
+.memo-cell.seg{font-weight:600;display:flex;align-items:center;gap:8px}
+.memo-cell.quote{color:var(--muted);font-style:italic;font-size:11px}
+.cta-badge{font-size:10px;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);white-space:nowrap}
+
+/* ── ACCUEIL ── */
+.accueil{padding:24px 40px 60px;max-width:1200px}
+.accroche{margin-bottom:32px}
+.accroche h1{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:#fff;margin-bottom:8px}
+.accroche p{font-size:13px;color:var(--muted);line-height:1.7;max-width:600px}
+
+.arbre{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px}
+.arbre-row{display:grid;grid-template-columns:1fr 120px 120px;border-bottom:1px solid var(--border)}
+.arbre-row:last-child{border-bottom:none}
+.arbre-row.header .arbre-cell{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.arbre-cell{padding:12px 16px;font-size:12px;border-right:1px solid var(--border)}
+.arbre-cell:last-child{border-right:none}
+.arbre-cell.oui{font-weight:600;text-align:center;cursor:pointer;transition:background .2s}
+.arbre-cell.oui:hover{background:var(--bg3)}
+.arbre-cell.non{color:var(--dim);text-align:center}
+@media(max-width:768px){
+  .header,.nav,.main,.accueil{padding-left:16px;padding-right:16px}
+  .grid2,.kw-grid,.memo-row,.arbre-row{grid-template-columns:1fr}
+  .memo-row{display:none}.arbre-row{display:flex;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <div class="logo">DAYLINDO</div>
+    <div class="tagline">When Skills Matter & Experience Count</div>
+  </div>
+  <div class="doc-label">Playbook Tech Sales — v2026</div>
+</div>
+
+<div class="regle">
+  <div class="regle-label">Règle d'or</div>
+  <div class="rules-inline">
+    <span class="rule-chip s1">SEG 1 → Parle d'argent</span>
+    <span class="rule-chip s2">SEG 2 → Parle de démarche</span>
+    <span class="rule-chip s3">SEG 3 → Parle d'homogénéité</span>
+    <span class="rule-chip s4">SEG 4 → Parle de stratégie</span>
+    <span class="rule-chip s5">SEG 5 → Parle de partenariat</span>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="seg-btn active" onclick="show('accueil',this)" id="btn-accueil" style="--acc:#4a5568">
+    <span class="dot" style="background:#4a5568"></span>Vue d'ensemble
+  </button>
+  <button class="seg-btn" onclick="show('daylindo',this)" id="btn-daylindo" style="--acc:#64748b;border-color:rgba(100,116,139,.4)">
+    <span class="dot" style="background:#64748b"></span>⚡ Notre offre Daylindo
+  </button>
+  <button class="seg-btn s1" onclick="show('s1',this)" id="btn-s1">
+    <span class="dot"></span>💰 Seg 1 — Optimisateurs
+  </button>
+  <button class="seg-btn s2" onclick="show('s2',this)" id="btn-s2">
+    <span class="dot"></span>🔧 Seg 2 — Gestes Métiers
+  </button>
+  <button class="seg-btn s3" onclick="show('s3',this)" id="btn-s3">
+    <span class="dot"></span>🏦 Seg 3 — Réseaux
+  </button>
+  <button class="seg-btn s4" onclick="show('s4',this)" id="btn-s4">
+    <span class="dot"></span>🏢 Seg 4 — CAC40
+  </button>
+  <button class="seg-btn s5" onclick="show('s5',this)" id="btn-s5">
+    <span class="dot"></span>🎓 Seg 5 — OF & CFA
+  </button>
+</div>
+
+<!-- ────────── VUE D'ENSEMBLE ────────── -->
+<div class="accueil seg-panel show" id="panel-accueil">
+  <div class="accroche" style="margin-top:28px">
+    <h1>Identifie le segment.<br>Parle à sa douleur.<br>Uniquement.</h1>
+    <p>Un message qui parle de tout ne parle à personne. Pour chaque appel ou message, commence par identifier le segment — puis adapte ton discours exactement au pain point de ce segment.</p>
+  </div>
+
+  <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:12px">Identifier le segment en 30 secondes</div>
+  <div class="arbre">
+    <div class="arbre-row header">
+      <div class="arbre-cell">Question</div>
+      <div class="arbre-cell">Si OUI</div>
+      <div class="arbre-cell">Sinon</div>
+    </div>
+    <div class="arbre-row">
+      <div class="arbre-cell">Est-ce un OF / CFA / CCI / Chambre de métiers ?</div>
+      <div class="arbre-cell oui s5" onclick="show('s5',document.getElementById('btn-s5'))" style="color:var(--s5c)">→ SEG 5</div>
+      <div class="arbre-cell non">Continue ↓</div>
+    </div>
+    <div class="arbre-row">
+      <div class="arbre-cell">Est-ce un CAC40 ou grande ETI (500+ salariés) ?</div>
+      <div class="arbre-cell oui s4" onclick="show('s4',document.getElementById('btn-s4'))" style="color:var(--s4c)">→ SEG 4</div>
+      <div class="arbre-cell non">Continue ↓</div>
+    </div>
+    <div class="arbre-row">
+      <div class="arbre-cell">Est-ce une banque, assurance, franchise ou réseau multi-sites ?</div>
+      <div class="arbre-cell oui s3" onclick="show('s3',document.getElementById('btn-s3'))" style="color:var(--s3c)">→ SEG 3</div>
+      <div class="arbre-cell non">Continue ↓</div>
+    </div>
+    <div class="arbre-row">
+      <div class="arbre-cell">Est-ce une industrie, énergie, santé, aéro, nucléaire ?</div>
+      <div class="arbre-cell oui s2" onclick="show('s2',document.getElementById('btn-s2'))" style="color:var(--s2c)">→ SEG 2</div>
+      <div class="arbre-cell non">Continue ↓</div>
+    </div>
+    <div class="arbre-row">
+      <div class="arbre-cell">Est-ce logistique, retail, hôtellerie, intérim, BTP (RH) ?</div>
+      <div class="arbre-cell oui s1" onclick="show('s1',document.getElementById('btn-s1'))" style="color:var(--s1c)">→ SEG 1</div>
+      <div class="arbre-cell non" style="color:var(--s1c)">→ SEG 1 par défaut</div>
+    </div>
+  </div>
+
+  <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:12px">Mémo flash — à avoir sous la main pendant l'appel</div>
+  <div class="memo">
+    <div class="memo-row header">
+      <div class="memo-cell">Segment</div>
+      <div class="memo-cell">Douleur</div>
+      <div class="memo-cell quote">Accroche</div>
+      <div class="memo-cell">CTA</div>
+    </div>
+    <div class="memo-row">
+      <div class="memo-cell seg"><span style="color:var(--s1)">💰</span> SEG 1<br><span style="font-weight:400;color:var(--muted);font-size:10px">Optimisateurs</span></div>
+      <div class="memo-cell">Coût intégration invisible, financement OPCO non mobilisé</div>
+      <div class="memo-cell quote">"Le coût réel d'intégration terrain, personne ne le documente... ni ne le finance."</div>
+      <div class="memo-cell"><span class="cta-badge">On prend 20 min pour une démo ?</span></div>
+    </div>
+    <div class="memo-row">
+      <div class="memo-cell seg"><span style="color:var(--s2)">🔧</span> SEG 2<br><span style="font-weight:400;color:var(--muted);font-size:10px">Gestes Métiers</span></div>
+      <div class="memo-cell">Les seniors partent et emportent leur savoir-faire</div>
+      <div class="memo-cell quote">"Dans 5 ans, vos experts seniors partent. Est-ce qu'il y a un dispositif pour capturer ce qu'ils savent faire ?"</div>
+      <div class="memo-cell"><span class="cta-badge">On prend 20 min pour une démo ?</span></div>
+    </div>
+    <div class="memo-row">
+      <div class="memo-cell seg"><span style="color:var(--s3)">🏦</span> SEG 3<br><span style="font-weight:400;color:var(--muted);font-size:10px">Réseaux</span></div>
+      <div class="memo-cell">Pratiques hétérogènes, financement permanents sous-exploité</div>
+      <div class="memo-cell quote">"Est-ce que toutes vos agences intègrent leurs équipes de la même façon ?"</div>
+      <div class="memo-cell"><span class="cta-badge">15 min pour structurer ça ?</span></div>
+    </div>
+    <div class="memo-row">
+      <div class="memo-cell seg"><span style="color:var(--s4)">🏢</span> SEG 4<br><span style="font-weight:400;color:var(--muted);font-size:10px">CAC40</span></div>
+      <div class="memo-cell">Données compétences non fiables pour leur SBO</div>
+      <div class="memo-cell quote">"Angle mort SBO : les données que vos outils consomment, qui les produit sur le terrain ?"</div>
+      <div class="memo-cell"><span class="cta-badge">On prend 20 min pour une démo ?</span></div>
+    </div>
+    <div class="memo-row">
+      <div class="memo-cell seg"><span style="color:var(--s5)">🎓</span> SEG 5<br><span style="font-weight:400;color:var(--muted);font-size:10px">OF & CFA</span></div>
+      <div class="memo-cell">Différenciation offre, CA additionnel, Qualiopi</div>
+      <div class="memo-cell quote">"Nouvelle brique AFEST à ajouter à votre catalogue — on déploie ensemble."</div>
+      <div class="memo-cell"><span class="cta-badge">On prend 20 min pour une démo ?</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── SEG 1 ────────── -->
+<div class="main seg-panel s1" id="panel-s1">
+  <div class="hero">
+    <div class="hero-top">
+      <span class="hero-emoji">💰</span>
+      <span class="hero-id">Segment 1 — Optimisateurs Financeurs</span>
+    </div>
+    <div class="hero-nom">Parle d'argent. Uniquement.</div>
+    <div class="hero-def">Entreprises à fort turnover. Leur déclencheur : l'optimisation financière. Si tu parles de gestes métiers, ils décrochent. Si tu parles d'argent économisé ou de financement OPCO, ils écoutent.</div>
+    <div class="pp-badge">🎯 PP1 — Turnover élevé & intégration coûteuse</div>
+  </div>
+
+  <div class="pp-card">
+    <div class="pp-name">PP1 — Turnover élevé & intégration coûteuse</div>
+    <div class="pp-desc">Le coût réel d'intégration est invisible dans les budgets. Chaque doublon non financé est de l'argent perdu. Ils ne savent pas que l'AFEST peut être financée à 100% via AKTO. C'est ton levier principal.</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📍 Secteurs cibles</div>
+      <div class="secteur-list">
+        <span class="tag">Intérim / Travail temporaire</span>
+        <span class="tag">Logistique / Transport</span>
+        <span class="tag">Grande Distribution / Retail</span>
+        <span class="tag">Hôtellerie / Tourisme</span>
+        <span class="tag">Restauration rapide & réseaux</span>
+        <span class="tag">BTP — rôles RH uniquement</span>
+        <span class="tag">Services de propreté</span>
+        <span class="tag">Aide à domicile</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Ce qui les déclenche</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8">
+        → Annonce de recrutement massif<br>
+        → Ouverture de nouveaux sites / agences<br>
+        → Campagne saisonnière imminente<br>
+        → Plainte sur le coût d'intégration<br>
+        → Turnover élevé visible sur LinkedIn
+      </div>
+    </div>
+  </div>
+
+  <div class="personas-section">
+    <div class="sec-label">Personas & Scripts</div>
+    <div class="persona-tabs">
+      <div class="p-tab active" onclick="switchPersona('s1',0,this)">DRH / Responsable RH</div>
+      <div class="p-tab" onclick="switchPersona('s1',1,this)">Responsable Formation</div>
+      <div class="p-tab" onclick="switchPersona('s1',2,this)">Dir. Exploitation / Opérations</div>
+    </div>
+    <div class="persona-panels">
+      <div class="persona-panel show" id="s1-p0">
+        <div class="douleur">💭 Douleur : Le turnover lui coûte cher et elle ne sait pas l'optimiser financièrement</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], j'ai vu que [entreprise] [trigger]. Dans votre secteur, le coût réel d'intégration terrain c'est souvent le grand absent des budgets — jusqu'au jour où on le calcule vraiment."</div>
+          <div class="script-line quote">"On aide des entreprises comme la vôtre à structurer et financer ces parcours via l'AKTO, souvent jusqu'à 100%. On peut se voir 20 minutes pour une démo concrète ?"</div>
+          <div class="script-line meta">❌ À NE PAS DIRE : plateforme, AFEST, technologie, digital. Parler uniquement de coût, ROI, financement.</div>
+        </div>
+      </div>
+      <div class="persona-panel" id="s1-p1">
+        <div class="douleur">💭 Douleur : Elle sait que les parcours d'intégration sont bancals mais n'a pas le budget pour les améliorer</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], la plupart des Responsables Formation dans votre secteur ne savent pas qu'ils peuvent faire financer à 100% les parcours d'intégration terrain via l'AKTO ou leur OPCO."</div>
+          <div class="script-line quote">"Ça change vraiment le rapport au budget formation. On peut se voir 20 minutes pour une démo ?"</div>
+          <div class="script-line tip">💡 Mots clés : financement OPCO, AKTO, parcours terrain, ROI, 1 000€ récupérés par intégration.</div>
+        </div>
+      </div>
+      <div class="persona-panel" id="s1-p2">
+        <div class="douleur">💭 Douleur : Les doublons lui coûtent cher mais il ne voit pas la formation comme une solution</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], chaque recrue passe en moyenne X semaines en doublon avant d'être autonome. Ce coût-là, personne ne le met dans son budget — et il n'est presque jamais financé."</div>
+          <div class="script-line quote">"On a structuré un kit pour calculer ce coût et le transformer en demande de financement. Je vous l'envoie ?"</div>
+          <div class="script-line meta">⚠️ CE PERSONA veut entendre : coût, doublon, rentabilité, rapidité. PAS "formation".</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kw-grid">
+    <div class="kw-card">
+      <div class="kw-title ok">✅ Mots à utiliser</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">coût d'intégration</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">financement OPCO / AKTO</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">turnover</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">doublon</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">ROI</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">parcours terrain</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">budget caché</span>
+      </div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-title ko">❌ À éviter</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">AFEST (comme accroche)</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">plateforme</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">compétences critiques</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">certification</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">digital learning</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── SEG 2 ────────── -->
+<div class="main seg-panel s2" id="panel-s2">
+  <div class="hero">
+    <div class="hero-top"><span class="hero-emoji">🔧</span><span class="hero-id">Segment 2 — Gestes Métiers</span></div>
+    <div class="hero-nom">Parle de démarche. Pas de plateforme.</div>
+    <div class="hero-def">Entreprises dont le cœur de valeur est dans un savoir-faire technique précis. Leur peur : que ce savoir-faire disparaisse quand les seniors partent. Ils veulent une DÉMARCHE — pas un outil. Le financement est un bonus à la fin.</div>
+    <div class="pp-badge">🎯 PP2 — Savoir-faire critiques à sécuriser</div>
+  </div>
+  <div class="pp-card">
+    <div class="pp-name">PP2 — Savoir-faire critiques à sécuriser</div>
+    <div class="pp-desc">Dans 3-5 ans, les seniors qui portent les gestes critiques seront à la retraite. Si on ne structure pas la transmission maintenant, ce savoir-faire part avec eux. Le financement est un bonus — jamais l'argument principal.</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📍 Secteurs cibles</div>
+      <div class="secteur-list">
+        <span class="tag">Industrie / Manufacturing</span>
+        <span class="tag">Énergie / Utilities</span>
+        <span class="tag">Santé / Pharma / Médico-social</span>
+        <span class="tag">Aéro / Défense</span>
+        <span class="tag">Nucléaire (Orano, EDF, CEA)</span>
+        <span class="tag">Ferroviaire (SNCF, Alstom)</span>
+        <span class="tag">BTP technique (QHSE, chantiers)</span>
+        <span class="tag">Télécoms / IT opérationnel</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Ce qui les déclenche</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8">
+        → Départ en retraite d'un expert senior<br>
+        → Recrutement massif sur des métiers techniques<br>
+        → Incident / non-conformité sur le terrain<br>
+        → Audit QHSE qui pointe des lacunes<br>
+        → Nouveau grand contrat / chantier
+      </div>
+    </div>
+  </div>
+  <div class="personas-section">
+    <div class="sec-label">Personas & Scripts</div>
+    <div class="persona-tabs">
+      <div class="p-tab active" onclick="switchPersona('s2',0,this)">DRH / Dir. Formation / L&D</div>
+      <div class="p-tab" onclick="switchPersona('s2',1,this)">Dir. Industriel / Resp. Production</div>
+      <div class="p-tab" onclick="switchPersona('s2',2,this)">Resp. QHSE / Méthodes</div>
+    </div>
+    <div class="persona-panels">
+      <div class="persona-panel show" id="s2-p0">
+        <div class="douleur">💭 Douleur : Elle sent la pression des départs à venir mais n'a pas de méthode structurée pour capturer et transmettre les gestes</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], dans [secteur], les profils seniors qui portent les gestes critiques vont partir dans les 5 prochaines années. C'est souvent là qu'on réalise qu'il n'y a pas de dispositif pour capturer ce qu'ils savent faire."</div>
+          <div class="script-line quote">"On accompagne des organisations comme la vôtre à structurer cette transmission — former les tuteurs internes, créer un référentiel de gestes observables, tracer ce qui a été validé. Est-ce un sujet chez vous ?"</div>
+          <div class="script-line meta">❌ NE PAS PARLER de plateforme en premier. La démarche passe avant l'outil.</div>
+        </div>
+      </div>
+      <div class="persona-panel" id="s2-p1">
+        <div class="douleur">💭 Douleur : Il sait que la qualité dépend de gestes précis qu'il ne saurait pas toujours décrire lui-même</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], dans [secteur], une compétence non maîtrisée ne génère pas juste une non-conformité — elle génère un incident. Et pourtant, la plupart des organisations n'ont pas de système pour prouver que le geste a été transmis correctement."</div>
+          <div class="script-line quote">"On structure des dispositifs pour vos formateurs internes — les tuteurs terrain — pour que ce soit observable, tracé, et opposable. On prend 20 min pour une démo ?"</div>
+          <div class="script-line tip">💡 Mots clés : geste critique, traçabilité, tuteur terrain, conformité, incident, preuve opposable.</div>
+        </div>
+      </div>
+      <div class="persona-panel" id="s2-p2">
+        <div class="douleur">💭 Douleur : Il a besoin que les procédures soient respectées mais les grilles papier ne suffisent plus</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], beaucoup de responsables QHSE ont des grilles papier pour suivre les compétences terrain. Le problème : elles ne sont pas opposables en cas d'audit, et personne ne sait vraiment qui a validé quoi et à quelle date."</div>
+          <div class="script-line quote">"On digitalise et structure ce suivi — depuis la grille jusqu'à la preuve datée. On peut se voir 20 minutes pour une démo ?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="kw-grid">
+    <div class="kw-card">
+      <div class="kw-title ok">✅ Mots à utiliser</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">transmission de savoir-faire</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">gestes critiques</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">tuteur terrain</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">traçabilité</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">démarche</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">départs seniors</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">preuve opposable</span>
+      </div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-title ko">❌ À éviter</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">financement comme accroche</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">plateforme SaaS en 1er</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">prix au mois par licence</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">OPCO comme argument principal</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── SEG 3 ────────── -->
+<div class="main seg-panel s3" id="panel-s3">
+  <div class="hero">
+    <div class="hero-top"><span class="hero-emoji">🏦</span><span class="hero-id">Segment 3 — Permanents dans les Agences / Réseaux</span></div>
+    <div class="hero-nom">Parle d'homogénéité. Et de financement structuré.</div>
+    <div class="hero-def">Entreprises organisées en réseaux d'agences. Problème : chaque agence fait différemment. L'intégration des permanents est mal standardisée et le financement via OPCO est sous-exploité. C'est un segment hybride — gestes + financement.</div>
+    <div class="pp-badge">🎯 PP3 — Réseaux multi-sites hétérogènes</div>
+  </div>
+  <div class="pp-card">
+    <div class="pp-name">PP3 — Réseaux multi-sites hétérogènes</div>
+    <div class="pp-desc">Les pratiques ne sont pas homogènes entre les agences. Certains managers intègrent bien, d'autres non. Et le financement de la formation des permanents via l'OPCO est souvent sous-exploité. Ton double levier : standardisation + financement.</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📍 Secteurs cibles</div>
+      <div class="secteur-list">
+        <span class="tag">Banque / Assurance</span>
+        <span class="tag">Franchise (restauration, commerce)</span>
+        <span class="tag">Réseaux de boutiques multi-sites</span>
+        <span class="tag">Intérim (agences permanentes)</span>
+        <span class="tag">Réseaux de services locaux</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Ce qui les déclenche</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8">
+        → Ouverture de nouvelles agences / franchises<br>
+        → Audit interne révélant des écarts entre sites<br>
+        → Recrutement de managers d'agence<br>
+        → Transformation du réseau / digitalisation<br>
+        → Problème de fidélisation des permanents
+      </div>
+    </div>
+  </div>
+  <div class="personas-section">
+    <div class="sec-label">Personas & Scripts</div>
+    <div class="persona-tabs">
+      <div class="p-tab active" onclick="switchPersona('s3',0,this)">DRH Réseau / Dir. Formation</div>
+      <div class="p-tab" onclick="switchPersona('s3',1,this)">Directeur Réseau / Dir. Agence</div>
+    </div>
+    <div class="persona-panels">
+      <div class="persona-panel show" id="s3-p0">
+        <div class="douleur">💭 Douleur : L'hétérogénéité des pratiques entre agences lui pose problème — il ne peut pas piloter ce qu'il ne mesure pas</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], dans un réseau de [X] agences, la vraie question c'est : est-ce que tous vos permanents intègrent et forment leurs équipes de la même façon ? En général, la réponse est non — et c'est difficile à corriger sans dispositif structuré."</div>
+          <div class="script-line quote">"On aide les réseaux comme le vôtre à harmoniser ces pratiques et à financer les parcours via l'OPCO. Est-ce un sujet chez vous ?"</div>
+        </div>
+      </div>
+      <div class="persona-panel" id="s3-p1">
+        <div class="douleur">💭 Douleur : Son CA dépend de la performance de ses équipes et il sait que certaines agences sur-performent parce qu'elles forment mieux</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], dans votre réseau, les meilleures agences ont souvent un point commun : elles ont une façon de former et d'intégrer leurs équipes qui est structurée. Le reste improvise."</div>
+          <div class="script-line quote">"On peut mettre ça en place de façon systématique — et en plus le financer via l'OPCO. Ça mérite 15 minutes ?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="kw-grid">
+    <div class="kw-card">
+      <div class="kw-title ok">✅ Mots à utiliser</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">homogénéité des pratiques</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">pilotage multi-sites</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">financement structuré</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">onboarding permanent</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">engagement collaborateurs</span>
+      </div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-title ko">❌ À éviter</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">gestes critiques industriels</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">technologie en premier</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">SBO / Skills-Based Organization</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── SEG 4 ────────── -->
+<div class="main seg-panel s4" id="panel-s4">
+  <div class="hero">
+    <div class="hero-top"><span class="hero-emoji">🏢</span><span class="hero-id">Segment 4 — Grands Groupes / CAC40</span></div>
+    <div class="hero-nom">Parle de stratégie. Jamais de pitch commercial.</div>
+    <div class="hero-def">Très grandes entreprises qui veulent piloter les compétences à l'échelle groupe. Elles investissent en outils RH et LMS, mais ces outils consomment des données compétences que personne ne produit sur le terrain. Leur vocabulaire : SBO.</div>
+    <div class="pp-badge">🎯 PP5 — Vers une Skill-Based Organization (SBO)</div>
+  </div>
+  <div class="pp-card">
+    <div class="pp-name">PP5 — Vers une Skill-Based Organization (SBO)</div>
+    <div class="pp-desc">Leurs outils talent management sont sophistiqués mais alimentés par des compétences déclarées ou inférées. L'angle mort de la SBO : personne ne capture la donnée compétence là où elle se forme vraiment. C'est ton entrée.</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📍 Secteurs cibles</div>
+      <div class="secteur-list">
+        <span class="tag">CAC40 (Thales, Orange, Airbus...)</span>
+        <span class="tag">LVMH, Hermès, Chanel (luxe)</span>
+        <span class="tag">Safran, Dassault (défense)</span>
+        <span class="tag">EDF, TotalEnergies (énergie)</span>
+        <span class="tag">Grandes ETI 500+ salariés</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Comment les approcher</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8">
+        → Nurturing via posts LinkedIn stratégiques<br>
+        → Articles sur AFEST / SBO / Work-Based Learning<br>
+        → Introduction par un contact commun<br>
+        → Référence Thales ou Orange comme prétexte<br>
+        → Pas de cold call direct — échange d'expert à expert
+      </div>
+    </div>
+  </div>
+  <div class="personas-section">
+    <div class="sec-label">Personas & Scripts</div>
+    <div class="persona-tabs">
+      <div class="p-tab active" onclick="switchPersona('s4',0,this)">DRH Groupe / VP HR</div>
+      <div class="p-tab" onclick="switchPersona('s4',1,this)">Dir. Académie / L&D</div>
+      <div class="p-tab" onclick="switchPersona('s4',2,this)">Dir. Transformation</div>
+    </div>
+    <div class="persona-panels">
+      <div class="persona-panel show" id="s4-p0">
+        <div class="douleur">💭 Douleur : Elle investit en outils mais les données compétences qu'ils consomment ne sont pas fiables — elles sont déclarées, pas prouvées</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], beaucoup d'organisations qui avancent sur leur stratégie Skills-Based ont le même angle mort : leurs outils consomment de la donnée compétence, mais personne ne la produit là où elle se forme vraiment — sur le terrain, en situation de travail."</div>
+          <div class="script-line quote">"C'est exactement ce que l'AFEST structurée permet de faire. Est-ce un sujet que vous avez déjà exploré ?"</div>
+          <div class="script-line meta">⚠️ CE PERSONA ne veut pas de pitch commercial. Échange stratégique entre experts uniquement.</div>
+        </div>
+      </div>
+      <div class="persona-panel" id="s4-p1">
+        <div class="douleur">💭 Douleur : Il pilote l'académie mais la formation terrain reste une boîte noire — il ne sait pas ce qui est vraiment transmis</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], dans la plupart des académies internes, les parcours e-learning et les formations présentiel sont bien trackés. Mais la formation terrain — le tutorat, les gestes métiers appris au poste — reste une boîte noire."</div>
+          <div class="script-line quote">"On structure précisément cette couche. On peut se voir 20 minutes — je vous montre le cas Orange ?"</div>
+        </div>
+      </div>
+      <div class="persona-panel" id="s4-p2">
+        <div class="douleur">💭 Douleur : Il déploie des outils pour une démarche SBO mais bute sur la couche fondatrice — la compétence terrain prouvée</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], une démarche SBO qui veut piloter par les compétences a besoin de compétences réelles — produites et tracées en situation de travail. Pas des compétences déclarées sur un CV ou inférées par algorithme."</div>
+          <div class="script-line quote">"L'AFEST est la couche fondatrice sur laquelle toute SBO repose. Thales vient de nous en confier le déploiement pour cette raison. Est-ce qu'on peut en parler ?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="kw-grid">
+    <div class="kw-card">
+      <div class="kw-title ok">✅ Mots à utiliser</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">SBO / Skills-Based Organization</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">Work-Based Learning</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">donnée compétence terrain</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">AFEST structurée</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">Thales / Orange (références)</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">angle mort SBO</span>
+      </div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-title ko">❌ À éviter</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">financement OPCO comme accroche</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">pitch commercial direct</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">prix au mois par licence</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">cold call sans introduction</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── SEG 5 ────────── -->
+<div class="main seg-panel s5" id="panel-s5">
+  <div class="hero">
+    <div class="hero-top"><span class="hero-emoji">🎓</span><span class="hero-id">Segment 5 — OF de Branche & Grands OF</span></div>
+    <div class="hero-nom">Parle de partenariat. Pas de vente directe.</div>
+    <div class="hero-def">Organismes de Formation, CFA, CCI, CNFPT... Ce sont des partenaires potentiels, pas des clients finaux. Le modèle : Daylindo déploie la démarche AFEST, l'OF la commercialise auprès de ses adhérents. Vente indirecte.</div>
+    <div class="pp-badge">🎯 PP6 — Nouvelle brique de Chiffre d'Affaires</div>
+  </div>
+  <div class="pp-card">
+    <div class="pp-name">PP6 — Nouvelle brique de Chiffre d'Affaires</div>
+    <div class="pp-desc">Ils cherchent à développer leur CA et leur différenciation. L'AFEST est souvent dans leur catalogue mais pas bien déployée. Daylindo peut devenir leur brique terrain clé en main. Modèle : tu commercialises, on déploie ensemble.</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📍 Structures cibles</div>
+      <div class="secteur-list">
+        <span class="tag">OF de branche</span>
+        <span class="tag">CFA</span>
+        <span class="tag">CCI / CMA</span>
+        <span class="tag">CNFPT / OPCO</span>
+        <span class="tag">E2C / MFR</span>
+        <span class="tag">BTP CFA / CCCA-BTP</span>
+        <span class="tag">Écoles internes d'entreprise</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Ce qui les déclenche</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8">
+        → Besoin de différencier leur offre catalogue<br>
+        → Pression Qualiopi sur la traçabilité terrain<br>
+        → Demande client pour de l'AFEST non couverte<br>
+        → Recherche de nouvelles sources de CA<br>
+        → Audit ou renouvellement de certification
+      </div>
+    </div>
+  </div>
+  <div class="personas-section">
+    <div class="sec-label">Personas & Scripts</div>
+    <div class="persona-tabs">
+      <div class="p-tab active" onclick="switchPersona('s5',0,this)">Directeur d'OF / Directeur CFA</div>
+      <div class="p-tab" onclick="switchPersona('s5',1,this)">Responsable Pédagogique</div>
+    </div>
+    <div class="persona-panels">
+      <div class="persona-panel show" id="s5-p0">
+        <div class="douleur">💭 Douleur : Il cherche à différencier son offre et à répondre à des besoins terrain que les formations classiques ne couvrent pas</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], de plus en plus d'entreprises nous demandent comment structurer la formation terrain au-delà des modules e-learning. C'est un besoin que les OF classiques couvrent peu."</div>
+          <div class="script-line quote">"On a développé une brique AFEST clé en main que certains OF intègrent à leur catalogue. Modèle : vous commercialisez, on déploie ensemble. On se voit 20 minutes pour une démo ?"</div>
+        </div>
+      </div>
+      <div class="persona-panel" id="s5-p1">
+        <div class="douleur">💭 Douleur : Il doit livrer des formations terrain prouvables (Qualiopi) mais les outils de traçabilité manquent</div>
+        <div class="script-label">Script d'approche</div>
+        <div class="script-lines">
+          <div class="script-line quote">"Bonjour [Prénom], avec Qualiopi, la question de la traçabilité des compétences terrain est de plus en plus exigée. Comment prouvez-vous qu'un apprenant a réellement acquis les gestes en situation de travail ?"</div>
+          <div class="script-line quote">"On a un outil qui produit ces preuves automatiquement — datées, observées, opposables. On peut se voir 20 minutes pour une démo ?"</div>
+          <div class="script-line tip">💡 Mots clés : Qualiopi, preuves terrain, traçabilité, différenciation catalogue, AFEST opposable.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="kw-grid">
+    <div class="kw-card">
+      <div class="kw-title ok">✅ Mots à utiliser</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">nouvelle brique CA</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">partenariat</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">Qualiopi</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">preuves terrain</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">différenciation catalogue</span>
+        <span class="tag" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#86efac">AFEST clé en main</span>
+      </div>
+    </div>
+    <div class="kw-card">
+      <div class="kw-title ko">❌ À éviter</div>
+      <div class="kw-list">
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">turnover (vocabulaire Seg1)</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">financement OPCO comme accroche</span>
+        <span class="tag" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.2);color:#fca5a5;text-decoration:line-through">pitch direct sans parler partenariat</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- DAYLINDO PANEL -->
+<div class="main seg-panel" id="panel-daylindo" style="max-width:1200px">
+  <div style="margin-top:24px">
+
+    <div style="background:linear-gradient(135deg,#0f1a2e,#101c30);border:1px solid rgba(100,116,139,.2);border-radius:12px;padding:28px 32px;margin-bottom:24px">
+      <div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#64748b;margin-bottom:10px">Notre offre</div>
+      <div style="font-family:Syne,sans-serif;font-size:26px;font-weight:800;color:#fff;margin-bottom:10px">Structurer, déployer et tracer<br>la transmission des compétences terrain.</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.8;max-width:700px">Daylindo accompagne les organisations dont le premier actif est le savoir-faire de leurs équipes terrain à le structurer, le transmettre et le prouver — au poste de travail, par les experts internes.</div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <span style="font-size:11px;padding:5px 14px;border-radius:20px;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.3);color:#94a3b8">AFEST structurée</span>
+        <span style="font-size:11px;padding:5px 14px;border-radius:20px;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.3);color:#94a3b8">Tuteur Terrain certifié</span>
+        <span style="font-size:11px;padding:5px 14px;border-radius:20px;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.3);color:#94a3b8">Work-Based Learning</span>
+        <span style="font-size:11px;padding:5px 14px;border-radius:20px;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.3);color:#94a3b8">Traçabilité opposable</span>
+        <span style="font-size:11px;padding:5px 14px;border-radius:20px;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.3);color:#94a3b8">Financement OPCO / AKTO</span>
+      </div>
+    </div>
+
+    <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:14px">Ce que fait Daylindo concrètement</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;border-top:3px solid #8b5cf6">
+        <div style="font-size:22px;margin-bottom:10px">👤</div>
+        <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:8px">Former les Tuteurs Terrain</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">On forme et certifie les experts internes de l'entreprise pour qu'ils deviennent de vrais tuteurs — capables d'observer, de questionner et de valider les gestes. Pas n'importe qui ne peut accompagner une AFEST.</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;border-top:3px solid #f97316">
+        <div style="font-size:22px;margin-bottom:10px">📋</div>
+        <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:8px">Structurer les Gestes Observables</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">On co-construit un référentiel de gestes métiers observables — quels gestes, quels comportements, quels indicateurs de maîtrise. Sans ça, chaque tuteur évalue à sa façon et la transmission devient aléatoire.</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;border-top:3px solid #14b8a6">
+        <div style="font-size:22px;margin-bottom:10px">🔐</div>
+        <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:8px">Tracer et Prouver les Acquis</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">La plateforme Daylindo enregistre qui a observé quoi, qui a validé quoi, et à quelle date. Les compétences sont datées, prouvées, opposables — elles alimentent les outils RH et résistent à un audit.</div>
+      </div>
+    </div>
+
+    <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:14px">Le problème qu'on résout</div>
+    <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:0;margin-bottom:28px;align-items:center">
+      <div style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.15);border-radius:10px;padding:20px">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--rouge);margin-bottom:14px">Avant Daylindo</div>
+        <div style="font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:9px;line-height:1.6">
+          <div><span style="color:var(--rouge)">✗</span> Les seniors transmettent dans leur tête — aucun système ne capture ce savoir-faire</div>
+          <div><span style="color:var(--rouge)">✗</span> Les intégrations durent trop longtemps, les doublons ne sont pas financés</div>
+          <div><span style="color:var(--rouge)">✗</span> Les grilles papier existent mais ne sont pas opposables en audit</div>
+          <div><span style="color:var(--rouge)">✗</span> Les outils LMS consomment des données compétences que personne ne produit sur le terrain</div>
+          <div><span style="color:var(--rouge)">✗</span> Le financement OPCO/AKTO des parcours terrain n'est pas mobilisé</div>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:24px;color:var(--dim)">→</div>
+      <div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.15);border-radius:10px;padding:20px">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--vert);margin-bottom:14px">Avec Daylindo</div>
+        <div style="font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:9px;line-height:1.6">
+          <div><span style="color:var(--vert)">✓</span> Les gestes sont formalisés dans un référentiel, observés par des tuteurs certifiés</div>
+          <div><span style="color:var(--vert)">✓</span> Les parcours sont structurés et financés via AKTO — souvent à 100%</div>
+          <div><span style="color:var(--vert)">✓</span> Chaque validation est datée, tracée, prouvable et opposable en audit</div>
+          <div><span style="color:var(--vert)">✓</span> La plateforme produit une donnée compétence terrain fiable pour les outils RH</div>
+          <div><span style="color:var(--vert)">✓</span> Le financement OPCO/AKTO est mobilisé par défaut dès la construction du parcours</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:14px">Ce qui nous différencie</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px">
+        <div style="font-size:12px;font-weight:600;color:#fff;margin-bottom:6px">Démarche avant outil</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">On n'est pas un éditeur de logiciel — on accompagne une transformation. La démarche AFEST structurée est le cœur. La plateforme vient ensuite pour la tracer. La plupart des concurrents font l'inverse.</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px">
+        <div style="font-size:12px;font-weight:600;color:#fff;margin-bottom:6px">Compétences prouvées, pas déclarées</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">Nos compétences sont observées en situation réelle, validées par un tuteur, datées et traçables. Ce n'est pas un QCM. C'est une preuve terrain opposable — la nuance est fondamentale.</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px">
+        <div style="font-size:12px;font-weight:600;color:#fff;margin-bottom:6px">Tuteur interne, pas formateur externe</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">On ne remplace pas les experts maison — on les forme et on les équipe. L'expert interne reste le transmetteur de confiance. Daylindo structure sa mission et trace ses validations.</div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px">
+        <div style="font-size:12px;font-weight:600;color:#fff;margin-bottom:6px">Financement optimisé par défaut</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">On maîtrise les montages AKTO et OPCO pour chaque secteur. Les parcours Daylindo sont construits pour être finançables dès le départ — pas une option, une condition de déploiement.</div>
+      </div>
+    </div>
+
+    <div style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:14px">Objections fréquentes — quoi répondre</div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:28px">
+      <div style="display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--border)">
+        <div style="padding:10px 16px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border-right:1px solid var(--border)">Objection</div>
+        <div style="padding:10px 16px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)">Ta réponse</div>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--border)">
+        <div style="padding:13px 16px;font-size:12px;color:var(--s1c);border-right:1px solid var(--border);font-style:italic">"On n'a pas de budget"</div>
+        <div style="padding:13px 16px;font-size:12px;color:var(--muted)">"Les parcours Daylindo sont finançables via l'AKTO à 100%. On structure pour que ce soit zéro reste à charge. C'est justement le sujet de la démo."</div>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--border)">
+        <div style="padding:13px 16px;font-size:12px;color:var(--s2c);border-right:1px solid var(--border);font-style:italic">"On forme déjà en interne"</div>
+        <div style="padding:13px 16px;font-size:12px;color:var(--muted)">"Très bien. La question c'est : est-ce que c'est tracé, prouvé, et opposable ? Si un incident arrive, qui peut prouver que la compétence a été correctement transmise ?"</div>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--border)">
+        <div style="padding:13px 16px;font-size:12px;color:var(--s3c);border-right:1px solid var(--border);font-style:italic">"On a déjà un LMS"</div>
+        <div style="padding:13px 16px;font-size:12px;color:var(--muted)">"Le LMS trace les modules e-learning. Daylindo trace les gestes terrain — ce que votre LMS ne peut pas faire parce que ça se passe hors écran, au poste de travail."</div>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid var(--border)">
+        <div style="padding:13px 16px;font-size:12px;color:var(--s4c);border-right:1px solid var(--border);font-style:italic">"On travaille sur notre SBO"</div>
+        <div style="padding:13px 16px;font-size:12px;color:var(--muted)">"Très bien. Est-ce que les données compétences qui alimentent votre SBO sont produites sur le terrain, en situation réelle ? Ou elles viennent de déclarations et d'inférences ?"</div>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr">
+        <div style="padding:13px 16px;font-size:12px;color:var(--s5c);border-right:1px solid var(--border);font-style:italic">"On fait déjà de l'AFEST"</div>
+        <div style="padding:13px 16px;font-size:12px;color:var(--muted)">"L'AFEST c'est souvent ce qu'on dit faire. La vraie question : est-ce qu'il y a une séquence réflexive structurée, des tuteurs formés, et une traçabilité des validations ? Sans ça, c'est de l'empirisme, pas de l'AFEST."</div>
+      </div>
+    </div>
+
+    <div style="background:#0a1628;border:1px solid rgba(59,130,246,.15);border-radius:10px;padding:20px">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#3b82f6;margin-bottom:10px">💡 Le concept clé : la séquence réflexive</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8">Sans séquence réflexive, il n'y a pas d'AFEST — il y a juste quelqu'un qui travaille. C'est le moment où le tuteur et l'apprenant s'arrêtent, regardent ce qui vient de se passer, comprennent pourquoi ça a marché ou pas, et ancrent l'apprentissage. C'est ce que Daylindo structure et trace — et ce que 90% des entreprises ne font pas.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.seg-panel').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('show');
+  if(btn) btn.classList.add('active');
+}
+
+function switchPersona(seg, idx, tab) {
+  const panel = document.getElementById('panel-'+seg);
+  panel.querySelectorAll('.p-tab').forEach(t => t.classList.remove('active'));
+  panel.querySelectorAll('.persona-panel').forEach(p => p.classList.remove('show'));
+  tab.classList.add('active');
+  panel.querySelector('#'+seg+'-p'+idx).classList.add('show');
+}
+</script>
+</body>
+</html>
